@@ -105,4 +105,8 @@ venv.bak/
 # mypy
 .mypy_cache/
 
+*.out
+*.csv
 
+wordcount/
+.idea/

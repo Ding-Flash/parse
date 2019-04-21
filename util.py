@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import math
 from sklearn.preprocessing import scale
+from htrace import Parse
 
 
 def bfs_tree(tree, nodes):
@@ -30,11 +31,13 @@ def hash_tree(trace):
     return len(set(res))
 
 
-def eu_dist(prefix, s1, s2):
-    src_df = pd.read_csv(prefix+s1+'.out.csv').drop([0,4,6,3,7,5])
-    com_df = pd.read_csv(prefix+s2+'.out.csv').drop([0,4,6,3,7,5])
+def eu_dist(always: Parse, prefix, sub, s2):
+    src_df = pd.read_csv(prefix+'a.csv').drop([0,4,6,3,7,5])
+    com_df = pd.read_csv(prefix+sub+s2+'.csv').drop([0,4,6,3,7,5])
     v1, v2 = [], []
-    for name in src_df.columns[1:]:
+    for name in always.names:
+        if always.func_feature[name]['count'] < 10:
+            continue
         v1.append(src_df[name][1])
         v1.append(src_df[name][2])
         if name in com_df.columns:
@@ -48,9 +51,9 @@ def eu_dist(prefix, s1, s2):
     return res
 
 
-def entropy(s1, s2, prefix):
-    src = pd.read_csv(prefix+s1+'.out.csv')
-    t = pd.read_csv(prefix+s2+'.out.csv')
+def entropy(prefix, sub, s2):
+    src = pd.read_csv(prefix+'a.csv')
+    t = pd.read_csv(prefix+sub+s2+'.csv')
     proba = np.array([0]*len(src.columns[1:]))
     count = 0
     for idx, name in enumerate(src.columns[1:]):

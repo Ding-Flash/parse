@@ -1,21 +1,19 @@
-# uncompyle6 version 3.3.1
-# Python bytecode 3.7 (3394)
-# Decompiled from: Python 3.7.0 (default, Jul 23 2018, 20:22:55) 
-# [Clang 9.1.0 (clang-902.0.39.2)]
-# Embedded file name: /Users/yangs/Desktop/htrace/htrace.py
-# Size of source mod 2**32: 4720 bytes
-import os, re, json
+import os
+import re
+import json
 from tqdm import tqdm
 import pandas as pd
 from collections import defaultdict
 
 
 def produce():
-    return {'name': None,
-            'time': None,
-            'begin': None,
-            'end': None,
-            'childs': []}
+    return {
+        'name': None,
+        'time': None,
+        'begin': None,
+        'end': None,
+        'childs': []
+    }
 
 
 def clean_name(name):
@@ -92,7 +90,6 @@ class Parse:
     def build_df(self, all_nodes=False):
         """
         将数据转化为dataframe
-        :param clean: 统计时一些函数名会自带一些参数，导致原本同一个函数会当成不同的函数，True: 表示对这些函数当成同一个函数处理，False: 表示当成不同的函数处理
         :param all_nodes: 是否统计所有节点
         :return:
         """
@@ -148,4 +145,4 @@ class Parse:
         self.func_feature = pd.concat(data, axis=1)
         self.func_feature.columns = self.names
         self.func_feature = self.func_feature.fillna(0)
-        self.func_feature.to_csv(self.path + '.csv')
+        self.func_feature.to_csv(self.path[:-4] + '.csv')
