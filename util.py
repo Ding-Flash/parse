@@ -32,7 +32,7 @@ def hash_tree(trace):
 
 
 def eu_dist(always: Parse, prefix, sub, s2):
-    src_df = pd.read_csv(prefix+'a.csv').drop([0,4,6,3,7,5])
+    src_df = pd.read_csv(prefix+'/a/1.csv').drop([0,4,6,3,7,5])
     com_df = pd.read_csv(prefix+sub+s2+'.csv').drop([0,4,6,3,7,5])
     v1, v2 = [], []
     for name in always.names:
@@ -52,7 +52,7 @@ def eu_dist(always: Parse, prefix, sub, s2):
 
 
 def entropy(prefix, sub, s2):
-    src = pd.read_csv(prefix+'a.csv')
+    src = pd.read_csv(prefix+'/a/1.csv')
     t = pd.read_csv(prefix+sub+s2+'.csv')
     proba = np.array([0]*len(src.columns[1:]))
     count = 0
