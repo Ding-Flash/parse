@@ -36,8 +36,8 @@ def eu_dist(always: Parse, prefix, sub, s2):
     com_df = pd.read_csv(prefix+sub+s2+'.csv').drop([0,4,6,3,7,5])
     v1, v2 = [], []
     for name in always.names:
-        if always.func_feature[name]['count'] < 10:
-            continue
+        # if always.func_feature[name]['count'] < 10:
+        #     continue
         v1.append(src_df[name][1])
         v1.append(src_df[name][2])
         if name in com_df.columns:
