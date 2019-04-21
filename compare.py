@@ -23,6 +23,7 @@ def sampler2csv(sub_path, flag):
     for i in range(10):
         print(f"分析{sub_path}{i+1}.out....")
         temp = Parse(bench+sub_path+str(i+1)+'.out', flag)
+        temp.df.to_csv(bench+sub_path+str(i+1)+'s.csv')
         print(f"分析{sub_path}{i+1}.out结束")
         node_number = len(temp.names)
         tree_number = hash_tree(temp)
