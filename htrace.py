@@ -146,3 +146,4 @@ class Parse:
         self.func_feature.columns = self.names
         self.func_feature = self.func_feature.fillna(0)
         self.func_feature.to_csv(self.path[:-4] + '.csv')
+        self.func_feature.T.to_csv(self.path[:-4] + 'view.csv')

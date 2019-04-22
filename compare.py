@@ -37,11 +37,6 @@ def sampler2csv(sub_path, flag, always, bench, com):
         res['en'].append(en)
         res['size'].append(size)
         display.append([i+1, node_number, tree_number, dist, en, size])
-    # tb = pt.PrettyTable()
-    # tb.field_names = [sub_path[:-1], 'node', 'tree', 'dist', 'entropy', 'size']
-    # for row in display:
-    #     tb.add_row(row)
-    # # print(tb)
     info = pd.DataFrame(res)
     desc = info.describe()
     com['node'].append(desc['node']['mean'])

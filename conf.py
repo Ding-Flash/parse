@@ -1,7 +1,5 @@
 
-benchs = ['/Users/yangs/Desktop/htrace/wordcount/',
-          '/Users/yangs/Desktop/htrace/pagerank/',
-          '/Users/yangs/Desktop/htrace/sort/',
+benchs = ['/Users/yangs/Desktop/htrace/wordcount/'
 ]
 
 samplers = ['limit/', 'number/', 'tbuck/', 'probability/']
@@ -9,7 +7,3 @@ samplers = ['limit/', 'number/', 'tbuck/', 'probability/']
 flag = True
 
 number = 1
-
-'/Users/yangs/Desktop/htrace/dfsioe/'
-'/Users/yangs/Desktop/htrace/kmeans/'
-'/Users/yangs/Desktop/htrace/tearsort/'
