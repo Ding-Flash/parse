@@ -3,7 +3,7 @@ import numpy as np
 import math
 from sklearn.preprocessing import scale
 from htrace import Parse
-
+import prettytable as pt
 
 def bfs_tree(tree, nodes):
     res = []
@@ -66,3 +66,63 @@ def entropy(prefix, sub, s2):
         if p:
             res -= p * math.log2(p)
     return res
+
+def delay(path, samplers):
+    """
+    从trace.log读取信息
+    """
+    info = {
+        'time': [],
+        'through': [],
+        'ctime': [],
+        'cthrough': []
+    }
+    btime,  bthrough = 0, 0
+    with open(path+'/n/trace.log', 'r') as f:
+        line = f.readlines()[-1]
+        _, btime, _, bthrough = line.split(' ')
+        btime = float(btime)
+        bthrough = float(bthrough)
+    tb = pt.PrettyTable()
+    tb.field_names = ['bench', '时间', '吞吐量']
+    tb.add_row([path, btime, bthrough])
+    print(tb)
+    for s in samplers:
+        with open(path+s+'/trace.log', 'r') as f:
+            line = f.readlines()[-1]
+            _, time, _, through = line.split(' ')
+            time = float(time)
+            through = float(through)
+        info['time'].append(time)
+        info['through'].append(through)
+        info['ctime'].append((time-btime)/btime)
+        info['cthrough'].append((through-bthrough)/bthrough)
+    return info
+
+
+def merge_info_display(path, samplers):
+    data = pd.read_csv(path+'res.csv')
+    another = delay(path, samplers)
+    data['time'] = another['time']
+    data['ctime'] = another['ctime']
+    data['through'] = another['through']
+    data['cthrough'] = another['cthrough']
+    data['size'] = data['size'].apply(lambda x: x/(2**20))
+    data.drop(['Unnamed: 0'], axis=1, inplace=True)
+    data.index = ['全采样', '限速采样', '令牌桶采样', '概率采样(0.01)', '概率采样(0.1)']
+    data = data.reindex(index = ['全采样', '概率采样(0.01)', '概率采样(0.1)', '限速采样', '令牌桶采样'])
+    data.columns = ['函数种类', '调用树种类', '相似度(欧氏)', '信息熵', '文件大小(M)', '执行时间', 'time延迟率', '吞吐量', 'through降低率']
+    return data
+
+def merge_info(path, samplers):
+    data = pd.read_csv(path+'res.csv')
+    another = delay(path, samplers)
+    data['time'] = another['time']
+    data['ctime'] = another['ctime']
+    data['through'] = another['through']
+    data['cthrough'] = another['cthrough']
+    data['size'] = data['size'].apply(lambda x: x/(2**20))
+    data.drop(['Unnamed: 0'], axis=1, inplace=True)
+    data.index = ['always', 'limit', 'tbuck', 'p0.01', 'p0.1']
+    data = data.reindex(index = ['always', 'p0.01', 'p0.1', 'limit', 'tbuck'])
+    return data

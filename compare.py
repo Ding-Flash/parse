@@ -61,10 +61,15 @@ def main():
         fprint(f'{bench} running....')
         always = Parse(bench + '/a/1.out', flag)
         always.df.to_csv(bench+'/a/1s.csv')
+        com['node'].append(len(always.names))
+        com['tree'].append(hash_tree(always))
+        com['dist'].append(0)
+        com['en'].append(entropy(bench, '/a/', '1'))
+        com['size'].append(always.size)
         for sampler in samplers:
             sampler2csv(sampler, flag, always, bench, com)
         c = pd.DataFrame(com)
-        c.index = [s[:-1] for s in samplers]
+        c.index = ['always']+[s[:-1] for s in samplers]
         c.to_csv(bench + 'res.csv')
         fprint('--------------------------------')
 
