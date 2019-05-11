@@ -5,6 +5,7 @@ from sklearn.preprocessing import scale
 from htrace import Parse
 import prettytable as pt
 
+
 def bfs_tree(tree, nodes):
     res = []
     names = nodes[tree]['name']
@@ -85,6 +86,7 @@ def entropy(prefix, sub, s2):
             res -= p * math.log2(p)
     return res
 
+
 def delay(path, samplers):
     """
     从trace.log读取信息
@@ -104,7 +106,7 @@ def delay(path, samplers):
     tb = pt.PrettyTable()
     tb.field_names = ['bench', '时间', '吞吐量']
     tb.add_row([path, btime, bthrough])
-    print(tb)
+    # print(tb)
     for s in samplers:
         with open(path+s+'/trace.log', 'r') as f:
             line = f.readlines()[-1]
@@ -136,6 +138,7 @@ def merge_info_display(path, samplers):
      ]
     return data
 
+
 def merge_info(path, samplers):
     data = pd.read_csv(path+'res.csv')
     another = delay(path, samplers)
@@ -145,6 +148,6 @@ def merge_info(path, samplers):
     data['cthrough'] = another['cthrough']
     data['size'] = data['size'].apply(lambda x: x/(2**20))
     data.drop(['Unnamed: 0'], axis=1, inplace=True)
-    data.index = ['always', 'bump', 'tbuck', 'p0.01', 'p0.1']
+    data.index = ['always', 'bump', 'tbuck', 'p0.1', 'p0.01']
     data = data.reindex(index = ['always', 'p0.01', 'p0.1', 'bump', 'tbuck'])
     return data

@@ -11,5 +11,7 @@ sns.set_style("whitegrid")
 x = np.array(range(1, 500))
 y = list(map(lambda x: 1 - math.exp(-20000/x**2), x))
 line = sns.lineplot(x=x,y=y)
-line.set(xlabel='call times of function', ylabel='sampling percentage')
+line.set(xlabel='call times of function', ylabel='sampling rate')
+
+plt.savefig('../bump.pdf')
 plt.show()
