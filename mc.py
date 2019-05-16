@@ -55,7 +55,7 @@ btime = benchs.loc[:, ['ctime', 'time', 'bench', 'sampler']]
 bsize = benchs.loc[:, ['filesize', 'bench', 'sampler']]
 
 sns.set(style="whitegrid", color_codes=True)
-fig, axes = plt.subplots(3, 2, figsize=(12.5, 6))
+fig, axes = plt.subplots(3, 2, figsize=(12, 6))
 
 hatches = itertools.cycle(['', '//', '\\\\', '..', '--'])
 
@@ -69,10 +69,22 @@ for i, bar in enumerate(time_plt.patches):
     bar.set_hatch(hatch)
 
 
-# time_plt.legend(bbox_to_anchor=(1.05, 1.0))
-time_plt.set(xlabel='Execution Time', ylabel='ln(time)')
-# plt.legend([time_plt], ['sampler'], loc='upper center')
-time_plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.5), ncol=5, fancybox=True)
+time_plt.legend().remove()
+time_plt.set(xlabel='Execution Time', ylabel='log(time)')
+plt.legend([time_plt], ['sampler'], loc='upper center')
+# plt.legend([time_plt],  loc='upper center', bbox_to_anchor=(0.5, 1.5), ncol=5, fancybox=True)
+
+# size
+size_plt = sns.barplot(x=bsize.bench, y=bsize.filesize, hue=bsize.sampler, ax=axes[0,1], linewidth=0.7)
+size_plt.legend().remove()
+
+for i, bar in enumerate(size_plt.patches):
+    if i % 6 == 0:
+        hatch = next(hatches)
+    bar.set_hatch(hatch)
+
+size_plt.set(xlabel='Trace file size', ylabel='log(size)')
+
 
 # node
 node_plt = sns.barplot(x=bnode.bench, y=bnode.node, hue=bnode.sampler, ax=axes[1,0], linewidth=0.7)
@@ -115,17 +127,8 @@ for i, bar in enumerate(dist_plt.patches):
 
 dist_plt.set(xlabel='Sample Similarity', ylabel='dist')
 
-# size
-size_plt = sns.barplot(x=bsize.bench, y=bsize.filesize, hue=bsize.sampler, ax=axes[0,1], linewidth=0.7)
-size_plt.legend().remove()
 
-for i, bar in enumerate(size_plt.patches):
-    if i % 6 == 0:
-        hatch = next(hatches)
-    bar.set_hatch(hatch)
 
-size_plt.set(xlabel='Trace File Compression Ratio', ylabel='ln(TFCR)')
-size_plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.5), ncol=5, fancybox=True)
 
 plt.tight_layout()
 fig.savefig('../mc.pdf')
